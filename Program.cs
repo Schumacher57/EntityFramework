@@ -1,16 +1,25 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Configuration;
-using Microsoft.Identity.Client;
-using Microsoft.IdentityModel.Protocols;
+using LearnEF.Modeles;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace MainPrg
 {
 
     class MyPrgBest
     {
+
+
         public static void Main(string[] args) {
             Console.WriteLine("Hello, World!");
+            using (var dbContext = new MDbContext()) {
 
+                dbContext.SaveChanges();
+            }
+
+
+            Console.ReadKey();
+        }
+        public static void AddDataToTable() {
             using (var dbContext = new MDbContext()) {
                 var user = new User();
                 user.Id = 1;
@@ -21,17 +30,27 @@ namespace MainPrg
                 dbContext.User.Add(user);
                 dbContext.SaveChanges();
             }
-
-            Console.ReadKey();
         }
+
+
     }
+
+
+
 
 
     class MDbContext : DbContext
     {
+        private static string connetctionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=D:\\Projects\\C#\\TestProjects\\LearnEF\\TestDB.mdf";
+
+
+        private DbContextOptions optionsBuilder;
+
 
         public DbSet<User> User { get; set; }
-        private string connetctionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=D:\\Projects\\C#\\TestProjects\\LearnEF\\TestDB.mdf";
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Customers> Customers { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
             if (!optionsBuilder.IsConfigured) {
                 optionsBuilder.UseSqlServer(connetctionString);
@@ -39,19 +58,18 @@ namespace MainPrg
         }
 
 
-    }
 
+        public MDbContext() : base() { }
 
-    class User
-    {
-
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string LastName { get; set; }
-        public int Age { get; set; }
+        public MDbContext(DbContextOptions options) {
+            this.optionsBuilder = options;
+        }
 
 
     }
+
+
+
 
 
     // Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=D:\Projects\C#\TestProjects\LearnEF\TestDB.mdf;Integrated Security=True

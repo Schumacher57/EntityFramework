@@ -1,3 +1,3 @@
-﻿use [D:\PROJECTS\C#\TESTPROJECTS\LEARNEF\TESTDB.MDF]
-
---SELECT ID FROM dbo.User
+﻿--SELECT * FROM [dbo].[User]
+use TesDB
+DROP TABLE [dbo].[User]
